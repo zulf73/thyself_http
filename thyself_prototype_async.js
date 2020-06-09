@@ -66,7 +66,7 @@ const url = 'mongodb+srv://unique:unique@cluster0-3cmqe.mongodb.net/?retryWrites
 					      reject(err)
 					  } else {
 					      resolve(data);
-					      ans = data[0];
+					      ans = data[0]['Anger'];
 					      console.log('got data');
 					      console.log(ans);
 					  }
@@ -229,16 +229,71 @@ var individual_myth_text = "Character is this moral order seen throughthe medium
 var uniqueness_text = "You are unique among the billions of people of the world because you along among all have this combination of traits.";
 
 //create a server object:
+    const assert = require('assert');
+    const mongo = require('mongodb').MongoClient
+    const url = 'mongodb+srv://unique:unique@cluster0-3cmqe.mongodb.net/?retryWrites=true&w=majority'
+    const dJSON = require('dirty-json');
+
 http.createServer(function (req, res) {
 
-  res.write(virtue_text); //write a response to the client
+    res.write(virtue_text); //write a response to the client
+    var realAns = '';
+    try {
+	
+	mongo.connect(url, { useNewUrlParser: true, useUnifiedTopology: true },
+		      (err, client) => {
+			  assert.equal(null, err);
+			  const db = client.db('prod');
+			  
+			  //Step 1: declare promise
+			  
+			  var myPromise = () => {
+			      return new Promise((resolve, reject) => {
+				  
+				  db
+				      .collection('uniqueness')
+				      .findOne({counter: 573},
+					       function(err, data) {
+						   if (err) { 
+						       reject(err)
+						   } else {
+						       var ans='';
+						       resolve(data);
+						       console.log(data);
+						       ans = data['Anger'];
+						       console.log('got data');
+						       console.log(ans);
+						       console.log('at response');
+						       return(ans);
+						   }
+					       });
+			      });
+			  };
+			  
+       //Step 2: async promise handler
+	var callMyPromise = async () => {
+          
+          var result = await (myPromise());
+          //anything here is executed after result is resolved
+          return result;
+	};
+ 
+       //Step 3: make the call
+			  callMyPromise().then(function(result) {
+			      realAns= result;
+			      console.log('aftercallMyPromise');
+			      console.log(realAns);
+          client.close();
+       });
+    }); //end mongo client
+   
+    } catch (e) {
+	next(e)
+    }
 
 
-    var a = find_uniqueness_doc_mongo(1234);
-    console.log('at response');
-    console.log(a);
-    res.write(a);
-    
+
+    res.write(realAns);
   res.write('after value');
     
   //res.write(individual_myth_text);
