@@ -259,7 +259,7 @@ http.createServer(function (req, res) {
 						       var ans='';
 						       resolve(data);
 						       console.log(data);
-						       ans = data['Anger'];
+						       ans = data['Anger'].toString();
 						       realAns = ans;
 						       console.log('got data');
 						       console.log(ans);
