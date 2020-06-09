@@ -66,10 +66,9 @@ const url = 'mongodb+srv://unique:unique@cluster0-3cmqe.mongodb.net/?retryWrites
 					      reject(err)
 					  } else {
 					      resolve(data);
-					      ans = data['Assertiveness'];
+					      ans = data[0];
 					      console.log('got data');
 					      console.log(ans);
-					     
 					  }
 				      });
 			      });
