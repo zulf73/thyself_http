@@ -236,7 +236,6 @@ var uniqueness_text = "You are unique among the billions of people of the world 
 
 http.createServer(function (req, res) {
 
-    res.write(virtue_text); //write a response to the client
     var realAns = '';
     try {
 	
@@ -261,10 +260,22 @@ http.createServer(function (req, res) {
 						       resolve(data);
 						       console.log(data);
 						       ans = data['Anger'];
+						       realAns = ans;
 						       console.log('got data');
 						       console.log(ans);
 						       console.log('at response');
+						       res.writeHead(200);
+
+						       res.write(virtue_text); //write a response to the client
+						       res.write(ans);
+						       res.write('after value');
+						       
+						       //res.write(individual_myth_text);
+						       //res.write(uniqueness_text);
+						       res.end(); //end the response
+
 						       return(ans);
+
 						   }
 					       });
 			      });
@@ -293,12 +304,7 @@ http.createServer(function (req, res) {
 
 
 
-    res.write(realAns);
-  res.write('after value');
-    
-  //res.write(individual_myth_text);
-  //res.write(uniqueness_text);
-  res.end(); //end the response
+
 }).listen(3002); //the server object listens on port 8080
 
 
